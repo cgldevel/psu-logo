@@ -17,6 +17,7 @@
     <style>
        :host {
         display: block;
+        position: relative;
       }
 
       #college-name {
@@ -31,6 +32,40 @@
         width: 1px;
         word-wrap: normal;
       }
+
+      svg {
+        position: relative;
+        z-index: 5;
+      }
+
+      #edit-panel {
+        background-color: #fafafa;
+        width: auto;
+        transition: all .3s ease-in-out;
+        z-index: 1;
+        max-height: 0;
+        overflow: hidden;
+        display: block;
+        padding: 0 10px;
+      }
+      #edit-panel:before,
+      #edit-panel:after {
+        display: block;
+        content: '';
+        width: auto;
+        height: 1px;
+        box-shadow: 0 0 22px 1px rgba(34, 34, 34, 0.3);
+      }
+      #edit-panel:before {
+        margin-bottom: 10px;
+      }
+      #edit-panel:after {
+        margin-top: 10px;
+      }
+
+      :host[edit] #edit-panel {
+        max-height: 200px;
+      }
     </style>
 
 
@@ -43,13 +78,13 @@
       </template>
     </template>
 
-    <template is="dom-if" if="[[edit]]">
+    <div id="edit-panel">
       <label>Adjust Word Wrap</label>
       <paper-slider min="10" max="25" value="{{wordWrap}}"></paper-slider>
 
       <label>Change College Name</label>
       <paper-input label="name" value="{{college}}"></paper-input>
-    </template>
+    </div>
 
 
     <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -187,7 +222,9 @@
         },
         edit: {
           type: Boolean,
-          value: false
+          value: false,
+          notify: true,
+          reflectToAttribute: true
         },
         editable: {
           type: Boolean,
